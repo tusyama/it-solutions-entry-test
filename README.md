@@ -1,6 +1,11 @@
 # Цифровая визитка специалиста
 
-GraphQL API, только на чтение. Посмотреть её можно в Apollo Sandbox: http://localhost:3000/graphql
+GraphQL API, только на чтение.
+
+При локальной работе посмотреть её можно в Apollo Sandbox:
+[http://localhost:3000/graphql](http://localhost:3000/graphql)
+
+Активный продакшн находится здесь: https://it-solutions-entry-test.onrender.com/graphql
 
 ## Запуск
 
