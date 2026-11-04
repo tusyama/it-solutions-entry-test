@@ -24,8 +24,8 @@ export class ProfileResolver {
   }
 
   @ResolveField(() => [Experience])
-  experiences(@Parent() profile: Profile) {
-    return this.profiles.findExperiences(profile.id);
+  experience(@Parent() profile: Profile) {
+    return this.profiles.findExperience(profile.id);
   }
 
   @ResolveField(() => [Project])

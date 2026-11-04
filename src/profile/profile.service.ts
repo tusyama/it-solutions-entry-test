@@ -31,7 +31,7 @@ export class ProfileService {
     });
   }
 
-  findExperiences(profileId: string) {
+  findExperience(profileId: string) {
     return this.prisma.experience.findMany({
       where: { profileId },
       orderBy: { sortOrder: 'asc' },

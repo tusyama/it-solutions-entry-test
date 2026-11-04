@@ -85,4 +85,7 @@ export class Profile {
 
   @Field(() => [Project])
   projects: Project[];
+
+  @Field(() => [Experience])
+  experience: Experience[];
 }

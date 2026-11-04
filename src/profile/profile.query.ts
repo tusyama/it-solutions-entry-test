@@ -12,7 +12,7 @@ export const PROFILE_CARD_QUERY = `query ProfileCard {
       name
       category
     }
-    experiences {
+    experience {
       company
       position
       startDate
