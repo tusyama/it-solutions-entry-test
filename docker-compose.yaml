@@ -14,6 +14,17 @@ services:
       interval: 2s
       timeout: 5s
       retries: 20
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: production
+      PORT: '3000'
+      DATABASE_URL: postgresql://card:card@postgres:5432/card
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   pgdata:
