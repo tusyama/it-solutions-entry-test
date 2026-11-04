@@ -16,7 +16,7 @@ datasource db {
 
 model Profile {
   id          String        @id
-  isPrimary   Boolean       @unique @default(true)
+  slot        Int    @unique @default(1)
   name        String
   description String
   skills      Skill[]

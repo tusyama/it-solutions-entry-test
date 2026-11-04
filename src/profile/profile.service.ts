@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { PrismaService } from '../prisma/prisma.service.js';
+import { PROFILE_SLOT } from './profile.constants.js';
 
 @Injectable()
 export class ProfileService {
@@ -7,7 +9,7 @@ export class ProfileService {
 
   async getPrimary() {
     const profile = await this.prisma.profile.findUnique({
-      where: { isPrimary: true },
+      where: { slot: PROFILE_SLOT },
     });
 
     if (!profile) {

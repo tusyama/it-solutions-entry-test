@@ -70,11 +70,10 @@ const profileId = data.profile.id;
 await prisma.$transaction(async (tx) => {
   await tx.profile.upsert({
     where: { id: profileId },
-    create: { ...data.profile, isPrimary: true },
+    create: { ...data.profile },
     update: {
       name: data.profile.name,
       description: data.profile.description,
-      isPrimary: true,
     },
   });
 
