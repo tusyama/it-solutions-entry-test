@@ -34,16 +34,18 @@ const cardSchema = z.object({
       }),
     )
     .min(1),
-  experiences: z.array(
-    z.object({
-      id: text,
-      company: text,
-      position: text,
-      startDate: period,
-      endDate: period.nullable(),
-      achievements: z.array(text).min(1),
-    }),
-  ),
+  experiences: z
+    .array(
+      z.object({
+        id: text,
+        company: text,
+        position: text,
+        startDate: period,
+        endDate: period.nullable(),
+        achievements: z.array(text).min(1),
+      }),
+    )
+    .min(1),
   projects: z
     .array(
       z.object({
