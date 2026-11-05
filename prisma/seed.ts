@@ -70,7 +70,7 @@ const prisma = new PrismaClient({
 });
 
 await prisma.$transaction(async (tx) => {
-  const profile = await tx.profile.upsert({
+  const { id: profileId } = await tx.profile.upsert({
     where: { slot: PROFILE_SLOT },
     create: { ...data.profile, slot: PROFILE_SLOT },
     update: {
@@ -79,8 +79,6 @@ await prisma.$transaction(async (tx) => {
       description: data.profile.description,
     },
   });
-
-  const profileId = profile.id;
 
   await tx.link.deleteMany({ where: { profileId } });
   await tx.skill.deleteMany({ where: { profileId } });
