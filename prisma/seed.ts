@@ -4,6 +4,8 @@ import { PrismaClient } from '../src/generated/prisma/client.js';
 import { createPgAdapter } from '../src/prisma/create-pg-adapter.js';
 import { card } from './card.data.js';
 
+import { PROFILE_SLOT } from '../src/profile/profile.constants.js';
+
 const period = z.string().regex(/^(?:\d{4}|\d{4}-(?:0[1-9]|1[0-2]))$/);
 const text = z.string().min(1);
 
@@ -65,17 +67,18 @@ const prisma = new PrismaClient({
   adapter: createPgAdapter(databaseUrl, process.env.DATABASE_SSL === 'true'),
 });
 
-const profileId = data.profile.id;
-
 await prisma.$transaction(async (tx) => {
-  await tx.profile.upsert({
-    where: { id: profileId },
-    create: { ...data.profile },
+  const profile = await tx.profile.upsert({
+    where: { slot: PROFILE_SLOT },
+    create: { ...data.profile, slot: PROFILE_SLOT },
     update: {
+      id: data.profile.id,
       name: data.profile.name,
       description: data.profile.description,
     },
   });
+
+  const profileId = profile.id;
 
   await tx.link.deleteMany({ where: { profileId } });
   await tx.skill.deleteMany({ where: { profileId } });
