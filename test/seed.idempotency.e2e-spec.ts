@@ -1,8 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+
 import { PrismaClient } from '../src/generated/prisma/client.js';
 import { createPgAdapter } from '../src/prisma/create-pg-adapter.js';
+import { card } from '../prisma/card.data.js';
+import { PROFILE_SLOT } from '../src/profile/profile.constants.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -38,6 +41,16 @@ describe('prisma db seed idempotency', () => {
       projects: await prisma.project.count(),
     };
 
+    await prisma.profile.update({
+      where: { slot: PROFILE_SLOT },
+      data: { id: 'stale-id', name: 'stale' },
+    });
+
+    await prisma.skill.update({
+      where: { id: card.skills[0].id },
+      data: { name: 'stale-skill' },
+    });
+
     await runSeed();
     const second = {
       profiles: await prisma.profile.count(),
@@ -49,8 +62,18 @@ describe('prisma db seed idempotency', () => {
 
     expect(first.profiles).toBe(1);
     expect(second).toEqual(first);
-    expect(
-      await prisma.profile.findUnique({ where: { slot: 1 } }),
-    ).not.toBeNull();
+
+    const restored = await prisma.profile.findUnique({
+      where: { slot: PROFILE_SLOT },
+    });
+    expect(restored).toMatchObject({
+      id: card.profile.id,
+      name: card.profile.name,
+      description: card.profile.description,
+    });
+    const skill = await prisma.skill.findUnique({
+      where: { id: card.skills[0].id },
+    });
+    expect(skill?.name).toBe(card.skills[0].name);
   });
 });
